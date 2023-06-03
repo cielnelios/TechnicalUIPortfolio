@@ -42,7 +42,7 @@ public class PlayerControl : MonoBehaviour
             this.MoveDirection = new Vector3(input.x, 0f, input.y);
 
             SetMoveDirectionAction(this.MoveDirection);
-            //SetStateAction(CharacterState.EnumICharacterState._moveState);
+            SetStateAction(CharacterState.EnumICharacterState._moveState);
         }
     }
 
