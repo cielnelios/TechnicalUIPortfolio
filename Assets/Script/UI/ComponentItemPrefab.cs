@@ -68,7 +68,8 @@ public class ComponentItemPrefab : MonoBehaviour, IBeginDragHandler, IDragHandle
             // 캐릭터 슬롯으로 끌어왔다면 컴포넌트를 붙인다.
             else if (this.transform.parent.CompareTag("CharacterComponentSlot"))
             {
-                _componentStrategySet = new ComponentStrategySet(enumComponentStrategy, this.transform.parent.gameObject);
+                GameObject targetCharacter = this.transform.parent.gameObject.GetComponent<CharacterComponentSlotPrefab>().characterComponentInfoPrefab.targetCharacter;
+                _componentStrategySet = new ComponentStrategySet(enumComponentStrategy, targetCharacter);
             }
         }
         // 캐릭터 슬롯에서 끌어왔는데
@@ -80,7 +81,8 @@ public class ComponentItemPrefab : MonoBehaviour, IBeginDragHandler, IDragHandle
                 // 이전 주인에게서 빼았고
                 if (_componentStrategySet != null) _componentStrategySet.CurrentComponentStrategy.ExitStrategy();
                 // 다시 컴포넌트를 붙인다.
-                _componentStrategySet = new ComponentStrategySet(enumComponentStrategy, this.transform.parent.gameObject);
+                GameObject targetCharacter = this.transform.parent.gameObject.GetComponent<CharacterComponentSlotPrefab>().characterComponentInfoPrefab.targetCharacter;
+                _componentStrategySet = new ComponentStrategySet(enumComponentStrategy, targetCharacter);
             }
             // 캐릭터 슬롯에서 캐릭터 슬롯 아닌 곳으로 치우면
             else if (!this.transform.parent.CompareTag("CharacterComponentSlot"))

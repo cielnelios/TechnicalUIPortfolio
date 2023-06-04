@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -7,13 +6,13 @@ public class CharacterComponentSlotPrefab : MonoBehaviour, IPointerEnterHandler,
 {
     private RectTransform _thisRectTransform;
     private Image _thisImage;
-    //public List<GameManager.ItemType> itemTypeOfThisSkillSlot = new List<GameManager.ItemType>();
+    public CharacterComponentInfoPrefab characterComponentInfoPrefab;
 
     private void Awake()
     {
         this._thisRectTransform = this.GetComponent<RectTransform>();
         this._thisImage = this.GetComponent<Image>();
-        this.gameObject.tag = "InventoryItemSlot";
+        this.gameObject.tag = "CharacterComponentSlot";
     }
 
     // 포인터 들락날락하면 색상 바뀜

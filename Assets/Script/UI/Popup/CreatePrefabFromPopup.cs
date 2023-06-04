@@ -44,6 +44,8 @@ public class CreatePrefabFromPopup : MonoBehaviour
             if (gameObject.CompareTag("Ground"))
             {
                 GameObject newObject = Instantiate(_fieldObject, position, new Quaternion(), gameObject.transform) as GameObject;
+                newPrefab.GetComponent<CharacterComponentInfoPrefab>().targetCharacter = newObject;
+                break;
             }
         }
     }
