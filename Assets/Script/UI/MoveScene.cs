@@ -6,8 +6,6 @@ public class MoveScene : MonoBehaviour
 {
     [SerializeField] private string nextSceneName;
     [SerializeField] private LoadSceneMode mode;
-    [SerializeField] private UIMasterIndex LodedSceneListClass;
-
     // LoadSceneMode.Single: 현재 씬을 해제하고 새로운 씬을 로드합니다.
     // LoadSceneMode.Additive: 현재 씬을 유지한 채 새로운 씬을 로드합니다.
 
@@ -15,7 +13,7 @@ public class MoveScene : MonoBehaviour
     {
         // 버튼에 씬 여는 기능을 등록
         Button thisButton = this.gameObject.GetComponent<Button>();
-        thisButton.onClick.AddListener( () => MoveSceneMethod(nextSceneName) );
+        thisButton.onClick.AddListener( () => this.MoveSceneMethod(nextSceneName) );
     }
 
     private void MoveSceneMethod(string nextScene)
@@ -24,7 +22,7 @@ public class MoveScene : MonoBehaviour
         if (!SceneManager.GetSceneByName(nextScene).isLoaded)
         {
             SceneManager.LoadScene(nextScene, mode);
-            LodedSceneListClass.AddUIScene(SceneManager.GetSceneByName(nextScene));
+            GameManager.Instance.AddUIScene(SceneManager.GetSceneByName(nextScene));
         }
     }
 }

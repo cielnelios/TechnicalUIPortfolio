@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - UIMaster
+  - ComponentList
+  - CharacterComponentSlot
   layers:
   - Default
   - TransparentFX

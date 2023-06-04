@@ -469,8 +469,8 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1941057036}
-        m_TargetAssemblyTypeName: UIMasterIndex, Assembly-CSharp
+      - m_Target: {fileID: 2074281120}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
         m_MethodName: DelUIScene
         m_Mode: 0
         m_Arguments:
@@ -1037,6 +1037,46 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3193464105242665503, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464105372808895, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464105454344031, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464105633323383, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464105669973630, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464105763276512, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464105781495164, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464105881543001, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464105910393408, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464105915189742, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 3193464106020474435, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1084,6 +1124,26 @@ PrefabInstance:
     - target: {fileID: 3193464106020474437, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
       propertyPath: m_Name
       value: Field_3D_Grid
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464106079630018, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464106280558533, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464106511050409, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464106638014294, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 3193464106713246921, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4e3bb5b8cea23af43af05ec4c5713364, type: 3}
@@ -1439,7 +1499,6 @@ GameObject:
   - component: {fileID: 1941057034}
   - component: {fileID: 1941057033}
   - component: {fileID: 1941057032}
-  - component: {fileID: 1941057036}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: UIMaster
@@ -1531,18 +1590,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1941057036
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1941057031}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5beb9e494f6559b4bb6db621ab7a39ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2015069478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1557,6 +1604,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Asset: {fileID: -944628639613478452, guid: 1230efb028fab1d4ab477a204ca30478, type: 3}
   m_ActionId: c95b2375-e6d9-4b88-9c4c-c5e76515df4b
+--- !u!1 &2074281118
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2074281119}
+  - component: {fileID: 2074281120}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2074281119
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074281118}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 145.72392, y: 404.55176, z: -1.7372947}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2074281120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2074281118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1181e2d363ed93e4dabc6d72c8b26391, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &2118474183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1827,4 +1918,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextSceneName: Inventory
   mode: 1
-  LodedSceneListClass: {fileID: 1941057036}
