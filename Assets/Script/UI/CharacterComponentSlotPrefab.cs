@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SetInventorySlotPrefab : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler
+public class CharacterComponentSlotPrefab : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDropHandler
 {
     private RectTransform _thisRectTransform;
     private Image _thisImage;
@@ -35,6 +35,7 @@ public class SetInventorySlotPrefab : MonoBehaviour, IPointerEnterHandler, IPoin
         {
             eventData.pointerDrag.transform.SetParent(transform);
             eventData.pointerDrag.GetComponent<RectTransform>().position = _thisRectTransform.position;
+            eventData.pointerDrag.GetComponent<RectTransform>().sizeDelta = new Vector2(_thisRectTransform.sizeDelta.x, _thisRectTransform.sizeDelta.y);
         }
     }
 }

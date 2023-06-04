@@ -44,8 +44,6 @@ public class ComponentItemPrefab : MonoBehaviour, IBeginDragHandler, IDragHandle
         // 반투명 처리한다음 레이캐스팅 중단
         this._thisCanvasGroup.alpha = 0.6f;
         this._thisCanvasGroup.blocksRaycasts = false;
-
-        
     }
     
     // 드래그중에 마우스 드래그 위치로 이 아이템을 옮긴다.
