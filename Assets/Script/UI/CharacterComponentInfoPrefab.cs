@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CharacterComponentInfoPrefab : MonoBehaviour
 {
@@ -7,12 +8,15 @@ public class CharacterComponentInfoPrefab : MonoBehaviour
     
     [SerializeField] private GameObject _contentContainer;
     [SerializeField] private GameObject _itemPrefab;
+    [SerializeField] private TextMeshProUGUI _thisText;
+    public (float xPos, float yPos) thisPosition;
 
     public Dictionary<GameObject, IComponentStrategy> StrategyInSlotDictionary// { get; private set; }
         = new Dictionary<GameObject, IComponentStrategy>();
 
     private void Start()
     {
+        _thisText.text = $"Object on ({thisPosition.xPos},{thisPosition.yPos})";
         this.CreateSlot();
     }
 

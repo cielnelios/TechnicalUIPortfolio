@@ -93,6 +93,8 @@ public class GameManager : MonoBehaviour
     {
         setColorRed,
         setSpin,
+        SetTall,
+        SetFat,
     }
 
     public Dictionary<EnumComponentStrategy, IComponentStrategy> IComponentStrategyDictionary
@@ -105,6 +107,8 @@ public class GameManager : MonoBehaviour
         // 이 패턴은 이미 매니저에 붙은 인스턴스이며, 실제로 배정되지 않음. context가 설정할거임
         IComponentStrategyDictionary.Add(EnumComponentStrategy.setColorRed, this.gameObject.AddComponent<SetColorRed>());
         IComponentStrategyDictionary.Add(EnumComponentStrategy.setSpin, this.gameObject.AddComponent<SetSpin>());
+        IComponentStrategyDictionary.Add(EnumComponentStrategy.SetTall, this.gameObject.AddComponent<SetTall>());
+        IComponentStrategyDictionary.Add(EnumComponentStrategy.SetFat, this.gameObject.AddComponent<SetFat>());
     }
 }
 
@@ -162,6 +166,50 @@ public class SetColorRed : MonoBehaviour, IComponentStrategy
     }
 }
 
+public class SetTall : MonoBehaviour, IComponentStrategy
+{
+    private float _tall = 3;
+
+    private Transform _thisComponent;
+    public void EnterStrategy(GameObject targetObject)
+    {
+        if (!targetObject.TryGetComponent<Transform>(out _thisComponent))
+        {
+            _thisComponent = targetObject.AddComponent<Transform>();
+        }
+
+        _thisComponent.localScale = new Vector3(1, _tall, 1);
+    }
+
+    public void ExitStrategy()
+    {
+        Destroy(this);
+        _thisComponent.localScale = Vector3.one;
+    }
+}
+
+public class SetFat : MonoBehaviour, IComponentStrategy
+{
+    private float _fat = 3;
+
+    private Transform _thisComponent;
+    public void EnterStrategy(GameObject targetObject)
+    {
+        if (!targetObject.TryGetComponent<Transform>(out _thisComponent))
+        {
+            _thisComponent = targetObject.AddComponent<Transform>();
+        }
+
+        _thisComponent.localScale = new Vector3(_fat, 1, _fat);
+    }
+
+    public void ExitStrategy()
+    {
+        Destroy(this);
+        _thisComponent.localScale = Vector3.one;
+    }
+}
+
 public class SetSpin : MonoBehaviour, IComponentStrategy
 {
     private void Awake()
@@ -169,6 +217,7 @@ public class SetSpin : MonoBehaviour, IComponentStrategy
         // FixedUpdate를 막기 위해
         this.enabled = false;
     }
+    private float _spinSpeed = 30;
 
     private Rigidbody _thisComponent;
     public void EnterStrategy(GameObject targetObject)
@@ -184,7 +233,7 @@ public class SetSpin : MonoBehaviour, IComponentStrategy
 
     private void FixedUpdate()
     {
-        Vector3 turn = Vector3.up * 3 * Time.deltaTime;
+        Vector3 turn = Vector3.up * _spinSpeed * Time.deltaTime;
         _thisComponent.rotation *= Quaternion.Euler(turn);
     }
 

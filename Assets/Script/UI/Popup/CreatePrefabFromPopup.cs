@@ -33,7 +33,9 @@ public class CreatePrefabFromPopup : MonoBehaviour
         // ÁÂÇ¥
         if (!int.TryParse(_Xpos.text, out int xPos)) xPos = 0;
         if (!int.TryParse(_Ypos.text, out int yPos)) yPos = 0;
-       
+
+        newPrefab.GetComponent<CharacterComponentInfoPrefab>().thisPosition = (xPos, yPos);
+
         Vector3 position = new Vector3(xPos, 1.0f, yPos);
 
         // ¾À Ã£¾Æ¼­ »ý¼º

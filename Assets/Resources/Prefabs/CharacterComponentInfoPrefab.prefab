@@ -171,6 +171,7 @@ MonoBehaviour:
   targetCharacter: {fileID: 0}
   _contentContainer: {fileID: 5731450520130000897}
   _itemPrefab: {fileID: 4573475956715404018, guid: bc19fe0177152944aa52ee096b5f90ed, type: 3}
+  _thisText: {fileID: 1807596656130798930}
 --- !u!1 &2330564929051865262
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,7 +238,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '{0}idx,{1}x,{2}y'
+  m_text: '{1}x,{2}y'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6b2200700c81c1549a06a7d6e24346b3, type: 2}
   m_sharedMaterial: {fileID: 1792662748625513313, guid: 6b2200700c81c1549a06a7d6e24346b3, type: 2}
