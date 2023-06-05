@@ -70,6 +70,16 @@ public class ComponentItemPrefab : MonoBehaviour, IBeginDragHandler, IDragHandle
             {
                 GameObject targetCharacter = this.transform.parent.gameObject.GetComponent<CharacterComponentSlotPrefab>().characterComponentInfoPrefab.targetCharacter;
                 _componentStrategySet = new ComponentStrategySet(enumComponentStrategy, targetCharacter);
+
+                // 이후 복사본을 만들어서 다시 컴포넌트 메뉴에 넣어준다.
+                GameObject copiedObject = Instantiate(this.gameObject);
+
+                copiedObject.transform.SetParent(_transformOfParentsBefore);
+                copiedObject.GetComponent<RectTransform>().position = this._transformOfParentsBefore.GetComponent<RectTransform>().position;
+                copiedObject.transform.SetSiblingIndex(index);  // 원래 위치로
+
+                copiedObject.GetComponent<CanvasGroup>().alpha = 1;
+                copiedObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
             }
         }
         // 캐릭터 슬롯에서 끌어왔는데

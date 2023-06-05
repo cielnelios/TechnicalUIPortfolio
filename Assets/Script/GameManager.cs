@@ -95,45 +95,6 @@ public class GameManager : MonoBehaviour
         IComponentStrategyDictionary.Add(EnumComponentStrategy.setColorRed, this.gameObject.AddComponent<SetColorRed>());
         IComponentStrategyDictionary.Add(EnumComponentStrategy.setSpin, this.gameObject.AddComponent<SetSpin>());
     }
-
-    public class SetColorRed : MonoBehaviour, IComponentStrategy
-    {
-        private Image _thisComponent;
-        public void EnterStrategy(GameObject targetObject)
-        {
-            if (!targetObject.TryGetComponent<Image>(out _thisComponent))
-            {
-                _thisComponent = targetObject.AddComponent<Image>();
-            }
-
-            _thisComponent.color = Color.red;
-        }
-
-        public void ExitStrategy()
-        {
-            Destroy(_thisComponent);
-        }
-    }
-
-    public class SetSpin : MonoBehaviour, IComponentStrategy
-    {
-        private Rigidbody _thisComponent;
-        public void EnterStrategy(GameObject targetObject)
-        {
-            if (!targetObject.TryGetComponent<Rigidbody>(out _thisComponent))
-            {
-                _thisComponent = targetObject.AddComponent<Rigidbody>();
-            }
-            _thisComponent.isKinematic = true;
-            Vector3 turn = Vector3.up * 30;
-            _thisComponent.rotation *= Quaternion.Euler(turn);
-        }
-
-        public void ExitStrategy()
-        {
-            Destroy(_thisComponent);
-        }
-    }
 }
 
 // 전략들이 공유하는 인터페이스
@@ -166,5 +127,60 @@ public class ComponentStrategySet
         // 오브젝트가 enum으로 고른 전략 클래스를 배정해주고, 전략 클래스에게 어떤 게임 오브젝트가 물렸는지 전달한다.
         CurrentComponentStrategy.EnterStrategy(targetObject);
     }
+
+    // 오브젝트 생성 현황 보존해야 됨
+    // 컴포넌트 넣는 캐릭터 프리팹에 좌표 정보, 넘버링, 그리고 그리드 형태로 확장 가능한 디자인으로 수정
 }
 
+public class SetColorRed : MonoBehaviour, IComponentStrategy
+{
+    private MeshRenderer _thisComponent;
+    public void EnterStrategy(GameObject targetObject)
+    {
+        if (!targetObject.TryGetComponent<MeshRenderer>(out _thisComponent))
+        {
+            _thisComponent = targetObject.AddComponent<MeshRenderer>();
+        }
+
+        _thisComponent.material.color = Color.red;
+    }
+
+    public void ExitStrategy()
+    {
+        Destroy(this);
+        _thisComponent.material.color = Color.white;
+    }
+}
+
+public class SetSpin : MonoBehaviour, IComponentStrategy
+{
+    private void Awake()
+    {
+        // FixedUpdate를 막기 위해
+        this.enabled = false;
+    }
+
+    private Rigidbody _thisComponent;
+    public void EnterStrategy(GameObject targetObject)
+    {
+        if (!targetObject.TryGetComponent<Rigidbody>(out _thisComponent))
+        {
+            _thisComponent = targetObject.AddComponent<Rigidbody>();
+        }
+        _thisComponent.isKinematic = true;
+
+        this.enabled = true;
+    }
+
+    private void FixedUpdate()
+    {
+        Vector3 turn = Vector3.up * 3 * Time.deltaTime;
+        _thisComponent.rotation *= Quaternion.Euler(turn);
+    }
+
+    public void ExitStrategy()
+    {
+        Destroy(this);
+        _thisComponent.isKinematic = false;
+    }
+}
