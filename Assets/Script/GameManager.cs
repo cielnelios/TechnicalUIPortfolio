@@ -50,7 +50,6 @@ public class GameManager : MonoBehaviour
     /////////////////////////////////////////////////////////////////////////////////
 
     private Stack<Scene> _uiList = new Stack<Scene>();
-
     // 씬을 스택에 추가
     public void AddUIScene(Scene scene)
     {
@@ -64,7 +63,20 @@ public class GameManager : MonoBehaviour
         if (this._uiList.Count > 0)
         {
             Scene UISceneToBeDeleted = this._uiList.Pop();
-            SceneManager.UnloadSceneAsync(UISceneToBeDeleted);
+            //Debug.Log("del " + UISceneToBeDeleted.name);
+            //SceneManager.UnloadSceneAsync(UISceneToBeDeleted);    // 씬을 없애는 코드
+
+            // UI 마스터만 숨기도록 하는 대체 구현. 이 포폴에서 UI 생성 내역을 serialize하기에는 번거롭다.
+            //MoveScene.MoveSceneMethod()의 추가 구현도 한세트임
+            foreach (GameObject gameObject in UISceneToBeDeleted.GetRootGameObjects())
+            {
+                //Debug.Log(gameObject.name);
+                if (gameObject.CompareTag("UIMaster"))
+                {
+                    gameObject.SetActive(false);
+                    break;  
+                }
+            }
         }
     }
 
@@ -128,7 +140,6 @@ public class ComponentStrategySet
         CurrentComponentStrategy.EnterStrategy(targetObject);
     }
 
-    // 오브젝트 생성 현황 보존해야 됨
     // 컴포넌트 넣는 캐릭터 프리팹에 좌표 정보, 넘버링, 그리고 그리드 형태로 확장 가능한 디자인으로 수정
 }
 

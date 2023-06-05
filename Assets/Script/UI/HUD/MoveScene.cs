@@ -24,5 +24,28 @@ public class MoveScene : MonoBehaviour
             SceneManager.LoadScene(nextScene, mode);
             GameManager.Instance.AddUIScene(SceneManager.GetSceneByName(nextScene));
         }
+
+        // 씬이 있다면 : 이 포폴에서 UI 생성 내역을 serialize하기에는 번거롭다.
+        //GameManager.DelUIScene()의 구현도 한 세트임
+        else
+        {
+            // UI 마스터를 찾아서
+            foreach (GameObject gameObject in SceneManager.GetSceneByName(nextScene).GetRootGameObjects())
+            {
+                if (gameObject.CompareTag("UIMaster"))
+                {
+                    // 비활성화라면 켜준다.
+                    if (gameObject.activeSelf == false)
+                    {
+                        gameObject.SetActive(true);
+                        GameManager.Instance.AddUIScene(SceneManager.GetSceneByName(nextScene));
+                    }
+
+                    // 활성화면 무반응이 된다.
+                    break;
+                }
+            }
+        }
     }
+
 }
