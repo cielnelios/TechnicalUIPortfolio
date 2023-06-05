@@ -1920,5 +1920,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 751c95a6a9b4d384c929bcf3b107de09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextSceneName: Inventory
+  nextSceneName: ComponentSetting
   mode: 1
