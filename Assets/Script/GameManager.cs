@@ -110,12 +110,35 @@ public class GameManager : MonoBehaviour
         IComponentStrategyDictionary.Add(EnumComponentStrategy.SetTall, this.gameObject.AddComponent<SetTall>());
         IComponentStrategyDictionary.Add(EnumComponentStrategy.SetFat, this.gameObject.AddComponent<SetFat>());
     }
+
+    // 캐릭터 슬롯에서 캐릭터가 가진 전략 목록을 기억하는 딕셔너리에 접근해, 제거할 전략을 딕셔너리에서도 빼주는 함수
+    public void RemoveKeyInChracterSlot(IComponentStrategy myClass, CharacterComponentInfoPrefab characterComponentInfoPrefab)
+    {
+        // 캐릭터 슬롯의 함수를 가져온다.
+        Dictionary<GameObject, IComponentStrategy> strategyDic = characterComponentInfoPrefab.StrategyInSlotDictionary;
+
+        // 함수에서
+        foreach (KeyValuePair<GameObject, IComponentStrategy> strategy in strategyDic)
+        {
+            if (strategy.Value == null)
+            {
+                // 널체크 회피
+                continue;
+            }
+            //딕셔너리에서 나와 같은 밸류를 찾아서 키값으로 제거
+            else if (myClass.GetType() == strategy.Value.GetType())
+            {
+                strategyDic.Remove(strategy.Key);
+                break;
+            }
+        }
+    }
 }
 
 // 전략들이 공유하는 인터페이스
 public interface IComponentStrategy
 {
-    void EnterStrategy(GameObject targetObject);
+    void EnterStrategy(GameObject targetObject, CharacterComponentInfoPrefab characterComponentInfoPrefab);
     void ExitStrategy();
 }
 
@@ -126,7 +149,7 @@ public class ComponentStrategySet
     public IComponentStrategy CurrentComponentStrategy { get; private set; }
 
     // 전략을 배치하는 곳에서 전략을 실제로 고르는 부분
-    public ComponentStrategySet(GameManager.EnumComponentStrategy enumComponentStrategy, GameObject targetObject)
+    public ComponentStrategySet(GameManager.EnumComponentStrategy enumComponentStrategy, GameObject targetObject, CharacterComponentInfoPrefab characterComponentInfoPrefab)
     {
         // enum으로 전략을 가져온다.
         GameManager.Instance.IComponentStrategyDictionary.TryGetValue(enumComponentStrategy, out IComponentStrategy componentStrategy);
@@ -140,7 +163,7 @@ public class ComponentStrategySet
         CurrentComponentStrategy = (IComponentStrategy)component;
 
         // 오브젝트가 enum으로 고른 전략 클래스를 배정해주고, 전략 클래스에게 어떤 게임 오브젝트가 물렸는지 전달한다.
-        CurrentComponentStrategy.EnterStrategy(targetObject);
+        CurrentComponentStrategy.EnterStrategy(targetObject, characterComponentInfoPrefab);
     }
 
     // 컴포넌트 넣는 캐릭터 프리팹에 좌표 정보, 넘버링, 그리고 그리드 형태로 확장 가능한 디자인으로 수정
@@ -148,21 +171,27 @@ public class ComponentStrategySet
 
 public class SetColorRed : MonoBehaviour, IComponentStrategy
 {
+    private GameObject _targetObject;
     private MeshRenderer _thisComponent;
-    public void EnterStrategy(GameObject targetObject)
+    private CharacterComponentInfoPrefab _characterComponentInfoPrefab;
+    public void EnterStrategy(GameObject targetObject, CharacterComponentInfoPrefab characterComponentInfoPrefab)
     {
         if (!targetObject.TryGetComponent<MeshRenderer>(out _thisComponent))
         {
             _thisComponent = targetObject.AddComponent<MeshRenderer>();
         }
-
+        _targetObject = targetObject;
+        _characterComponentInfoPrefab = characterComponentInfoPrefab;
         _thisComponent.material.color = Color.red;
     }
 
     public void ExitStrategy()
     {
-        Destroy(this);
+        // 딕셔너리 처리
+        GameManager.Instance.RemoveKeyInChracterSlot(this, _characterComponentInfoPrefab);
+
         _thisComponent.material.color = Color.white;
+        Destroy(this);
     }
 }
 
@@ -170,21 +199,27 @@ public class SetTall : MonoBehaviour, IComponentStrategy
 {
     private float _tall = 3;
 
+    private GameObject _targetObject;
     private Transform _thisComponent;
-    public void EnterStrategy(GameObject targetObject)
+    private CharacterComponentInfoPrefab _characterComponentInfoPrefab;
+    public void EnterStrategy(GameObject targetObject, CharacterComponentInfoPrefab characterComponentInfoPrefab)
     {
         if (!targetObject.TryGetComponent<Transform>(out _thisComponent))
         {
             _thisComponent = targetObject.AddComponent<Transform>();
         }
-
+        _targetObject = targetObject;
+        _characterComponentInfoPrefab = characterComponentInfoPrefab;
         _thisComponent.localScale = new Vector3(1, _tall, 1);
     }
 
     public void ExitStrategy()
     {
-        Destroy(this);
+        // 딕셔너리 처리
+        GameManager.Instance.RemoveKeyInChracterSlot(this, _characterComponentInfoPrefab);
+
         _thisComponent.localScale = Vector3.one;
+        Destroy(this);
     }
 }
 
@@ -192,21 +227,27 @@ public class SetFat : MonoBehaviour, IComponentStrategy
 {
     private float _fat = 3;
 
+    private GameObject _targetObject;
     private Transform _thisComponent;
-    public void EnterStrategy(GameObject targetObject)
+    private CharacterComponentInfoPrefab _characterComponentInfoPrefab;
+    public void EnterStrategy(GameObject targetObject, CharacterComponentInfoPrefab characterComponentInfoPrefab)
     {
         if (!targetObject.TryGetComponent<Transform>(out _thisComponent))
         {
             _thisComponent = targetObject.AddComponent<Transform>();
         }
-
+        _targetObject = targetObject;
+        _characterComponentInfoPrefab = characterComponentInfoPrefab;
         _thisComponent.localScale = new Vector3(_fat, 1, _fat);
     }
 
     public void ExitStrategy()
     {
-        Destroy(this);
+        // 딕셔너리 처리
+        GameManager.Instance.RemoveKeyInChracterSlot(this, _characterComponentInfoPrefab);
+
         _thisComponent.localScale = Vector3.one;
+        Destroy(this);
     }
 }
 
@@ -219,13 +260,17 @@ public class SetSpin : MonoBehaviour, IComponentStrategy
     }
     private float _spinSpeed = 30;
 
+    private GameObject _targetObject;
     private Rigidbody _thisComponent;
-    public void EnterStrategy(GameObject targetObject)
+    private CharacterComponentInfoPrefab _characterComponentInfoPrefab;
+    public void EnterStrategy(GameObject targetObject, CharacterComponentInfoPrefab characterComponentInfoPrefab)
     {
         if (!targetObject.TryGetComponent<Rigidbody>(out _thisComponent))
         {
             _thisComponent = targetObject.AddComponent<Rigidbody>();
         }
+        _targetObject = targetObject;
+        _characterComponentInfoPrefab = characterComponentInfoPrefab;
         _thisComponent.isKinematic = true;
 
         this.enabled = true;
@@ -239,7 +284,10 @@ public class SetSpin : MonoBehaviour, IComponentStrategy
 
     public void ExitStrategy()
     {
-        Destroy(this);
+        // 딕셔너리 처리
+        GameManager.Instance.RemoveKeyInChracterSlot(this, _characterComponentInfoPrefab);
+
         _thisComponent.isKinematic = false;
+        Destroy(this);
     }
 }

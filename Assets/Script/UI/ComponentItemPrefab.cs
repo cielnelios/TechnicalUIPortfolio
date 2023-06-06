@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
@@ -71,26 +72,68 @@ public class ComponentItemPrefab : MonoBehaviour, IBeginDragHandler, IDragHandle
                 CharacterComponentInfoPrefab characterComponentInfoPrefab = this.transform.parent.gameObject.GetComponent<CharacterComponentSlotPrefab>().characterComponentInfoPrefab;
                 GameObject targetCharacter = characterComponentInfoPrefab.targetCharacter;
 
-                // strategySet으로 전략 클래스를 만들고 컴포넌트를 장착해서 동작
-                _componentStrategySet = new ComponentStrategySet(enumComponentStrategy, targetCharacter);
+                // 만약 이미 목록에 있다면 캔슬하는 부분
+                bool isAreadyInCharacter = false;
+                // 캐릭터 슬롯이 가진 컴포넌트 전략 중에
+                List<IComponentStrategy> strategyList = new List<IComponentStrategy>(characterComponentInfoPrefab.StrategyInSlotDictionary.Values);
+                
+                // 기본으로 null 가진게 배치되니까 최소 2개부터 체크해야
+                if (strategyList.Count> 1)
+                {
+                    Debug.Log(strategyList.Count);
+                    // 이 컴포넌트의 전략 클래스
+                    GameManager.Instance.IComponentStrategyDictionary.TryGetValue(enumComponentStrategy, out IComponentStrategy iComponentStrategyValue);
 
-                // 캐릭터쪽 스크립트에 슬롯에 장착된 전략 정보를 넘김
-                characterComponentInfoPrefab.StrategyInSlotDictionary[this.transform.parent.gameObject] = _componentStrategySet.CurrentComponentStrategy;
+                    // 같은게 있다면 트리거 체크
+                    foreach (IComponentStrategy strategy in strategyList)
+                    {
+                        if (strategy == null)
+                        {
+                            // 널체크 회피
+                            continue;
+                        }
+                        else if (iComponentStrategyValue.GetType() == strategy.GetType())
+                        {
+                            isAreadyInCharacter = true;
+                            break;
+                        }
+                    }
+                }
 
-                // 이후 복사본을 만들어서
-                GameObject copiedObject = Instantiate(this.gameObject);
+                // 있었다면 복귀
+                if (isAreadyInCharacter)
+                {
+                    this.transform.SetParent(_transformOfParentsBefore);
+                    this._thisRectTransform.position = this._transformOfParentsBefore.GetComponent<RectTransform>().position;
+                    this.transform.SetSiblingIndex(index);  // 원래 위치로
+                }
+                // 아니라면 처리
+                else
+                {
+                    // strategySet으로 전략 클래스를 만들고 컴포넌트를 장착해서 동작
+                    _componentStrategySet = new ComponentStrategySet(enumComponentStrategy, targetCharacter, characterComponentInfoPrefab);
 
-                // 다시 컴포넌트 리스트에 넣어준다.
-                copiedObject.transform.SetParent(_transformOfParentsBefore);
-                copiedObject.GetComponent<RectTransform>().position = this._transformOfParentsBefore.GetComponent<RectTransform>().position;
-                copiedObject.transform.SetSiblingIndex(index);  // 원래 위치로
+                    // 캐릭터쪽 스크립트에 슬롯에 장착된 전략 정보를 넘김
+                    characterComponentInfoPrefab.StrategyInSlotDictionary[this.transform.parent.gameObject] = _componentStrategySet.CurrentComponentStrategy;
 
-                // 복사하면서 딸려온 처리도 롤백
-                copiedObject.GetComponent<CanvasGroup>().alpha = 1;
-                copiedObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
+                    // 복사본을 리스트에 되돌리는 처리 시작
 
-                // Slot 증가
-                characterComponentInfoPrefab.CreateSlot();
+                    // 이후 복사본을 만들어서
+                    GameObject copiedObject = Instantiate(this.gameObject);
+
+                    // 다시 컴포넌트 리스트에 넣어준다.
+                    copiedObject.transform.SetParent(_transformOfParentsBefore);
+                    copiedObject.GetComponent<RectTransform>().position = this._transformOfParentsBefore.GetComponent<RectTransform>().position;
+                    copiedObject.transform.SetSiblingIndex(index);  // 원래 위치로
+
+                    // 복사하면서 딸려온 처리도 롤백
+                    copiedObject.GetComponent<CanvasGroup>().alpha = 1;
+                    copiedObject.GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+                    // Slot 증가
+                    characterComponentInfoPrefab.CreateSlot();
+                }
+
             }
         }
         // 캐릭터 슬롯에서 끌어왔는데
@@ -106,7 +149,7 @@ public class ComponentItemPrefab : MonoBehaviour, IBeginDragHandler, IDragHandle
                 // 다시 컴포넌트를 붙인다.
                 CharacterComponentInfoPrefab characterComponentInfoPrefab = this.transform.parent.gameObject.GetComponent<CharacterComponentSlotPrefab>().characterComponentInfoPrefab;
                 GameObject targetCharacter = characterComponentInfoPrefab.targetCharacter;
-                _componentStrategySet = new ComponentStrategySet(enumComponentStrategy, targetCharacter);
+                _componentStrategySet = new ComponentStrategySet(enumComponentStrategy, targetCharacter, characterComponentInfoPrefab);
 
                 // Slot 증가
                 characterComponentInfoPrefab.CreateSlot();
@@ -117,6 +160,7 @@ public class ComponentItemPrefab : MonoBehaviour, IBeginDragHandler, IDragHandle
                 // 이전 주인에게서 빼았고, 비게 된 이전 슬롯을 없앤다.
                 if (_componentStrategySet != null) _componentStrategySet.CurrentComponentStrategy.ExitStrategy();
                 Destroy(this._transformOfParentsBefore.gameObject);
+
                 // 자신도 파괴한다.
                 Destroy(this.gameObject);
                 return;
