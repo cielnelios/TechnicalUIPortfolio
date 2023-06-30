@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
         if (_instance == null)
         {
             _instance = this;
+            // 여기서 초기화
             this.MakeDictionary();
         }
         // 인스턴스가 존재하는 경우 새로생기는 인스턴스를 삭제한다.
@@ -103,15 +104,15 @@ public class GameManager : MonoBehaviour
     // Awake에서 실행
     private void MakeDictionary()
     {
-        // 딕셔너리에 패턴을 추가한다.
-        // 이 패턴은 이미 매니저에 붙은 인스턴스이며, 실제로 배정되지 않음. context가 설정할거임
+        // 딕셔너리에 상태 인스턴스를 추가한다.
+        // 이 패턴은 이미 게임 매니저에 컴포넌트로 붙었고, 따라서 실제로 생성할 오브젝트들에게는 실제로 배정되지 않음.
         IComponentStrategyDictionary.Add(EnumComponentStrategy.setColorRed, this.gameObject.AddComponent<SetColorRed>());
         IComponentStrategyDictionary.Add(EnumComponentStrategy.setSpin, this.gameObject.AddComponent<SetSpin>());
         IComponentStrategyDictionary.Add(EnumComponentStrategy.SetTall, this.gameObject.AddComponent<SetTall>());
         IComponentStrategyDictionary.Add(EnumComponentStrategy.SetFat, this.gameObject.AddComponent<SetFat>());
     }
 
-    // 캐릭터 슬롯에서 캐릭터가 가진 전략 목록을 기억하는 딕셔너리에 접근해, 제거할 전략을 딕셔너리에서도 빼주는 함수
+    // 캐릭터 슬롯에서 캐릭터가 가진 상태 목록을 기억하는 딕셔너리에 접근해, 제거할 상태를 딕셔너리에서도 빼주는 함수
     public void RemoveKeyInChracterSlot(IComponentStrategy myClass, CharacterComponentInfoPrefab characterComponentInfoPrefab)
     {
         // 캐릭터 슬롯의 함수를 가져온다.
@@ -135,34 +136,34 @@ public class GameManager : MonoBehaviour
     }
 }
 
-// 전략들이 공유하는 인터페이스
+// 상태들이 공유하는 인터페이스
 public interface IComponentStrategy
 {
     void EnterStrategy(GameObject targetObject, CharacterComponentInfoPrefab characterComponentInfoPrefab);
     void ExitStrategy();
 }
 
-// 전략을 배정하고, 그 배정된 내역을 관리하기 위해 각각의 고객 오브젝트에 붙는 집사
+// 상태를 배정하고, 그 배정된 내역을 관리하기 위해 각각의 고객 오브젝트에 붙는 관리용 context 함수
 public class ComponentStrategySet
 {
-    // 현재 선택된 전략을 담는 변수
+    // 현재 선택된 상태를 담는 변수
     public IComponentStrategy CurrentComponentStrategy { get; private set; }
 
-    // 전략을 배치하는 곳에서 전략을 실제로 고르는 부분
+    // 상태를 배치하는 곳에서 상태를 실제로 고르는 부분
     public ComponentStrategySet(GameManager.EnumComponentStrategy enumComponentStrategy, GameObject targetObject, CharacterComponentInfoPrefab characterComponentInfoPrefab)
     {
-        // enum으로 전략을 가져온다.
+        // enum으로 상태를 가져온다.
         GameManager.Instance.IComponentStrategyDictionary.TryGetValue(enumComponentStrategy, out IComponentStrategy componentStrategy);
 
-        // enum으로 고른 전략 클래스 컴포넌트를 배정해주고,
+        // enum으로 고른 상태 클래스 컴포넌트를 배정해주고,
         System.Type type = componentStrategy.GetType();
         targetObject.AddComponent(type);
 
-        // 선택된 전략 클래스를 컨텍스트에서 기록하고, 고객 게임 오브젝트가 질의할때 알려주는 용도로 사용.
+        // 선택된 상태 클래스를 컨텍스트에서 기록하고, 고객 게임 오브젝트가 질의할때 알려주는 용도로 사용.
         targetObject.TryGetComponent(type, out Component component);
         CurrentComponentStrategy = (IComponentStrategy)component;
 
-        // 오브젝트가 enum으로 고른 전략 클래스를 배정해주고, 전략 클래스에게 어떤 게임 오브젝트가 물렸는지 전달한다.
+        // 오브젝트가 enum으로 고른 상태 클래스를 배정해주고, 상태 클래스에게 어떤 게임 오브젝트가 물렸는지 전달한다.
         CurrentComponentStrategy.EnterStrategy(targetObject, characterComponentInfoPrefab);
     }
 
