@@ -23,14 +23,14 @@ public class PlayerControl : MonoBehaviour
         MoveAction = playerInputActionMap.FindAction("Move");
     }
 
-    private Action<Vector3> SetMoveDirectionAction;
-    private Action<float> SetTurnDirectionAction;
-    private Action<CharacterState.EnumICharacterState> SetStateAction;
+    private Action<Vector3> _setMoveDirectionAction;
+    private Action<float> _setTurnDirectionAction;
+    private Action<CharacterState.EnumICharacterState> _setStateAction;
     public void Start()
     {
-        SetMoveDirectionAction = characterState.SetMoveDirection;
-        SetTurnDirectionAction = characterState.SetTurnDirection;
-        SetStateAction = characterState.SetState;
+        _setMoveDirectionAction = characterState.SetMoveDirection;
+        _setTurnDirectionAction = characterState.SetTurnDirection;
+        _setStateAction = characterState.SetState;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -41,8 +41,8 @@ public class PlayerControl : MonoBehaviour
             Vector2 input = context.ReadValue<Vector2>();
             this.MoveDirection = new Vector3(input.x, 0f, input.y);
 
-            SetMoveDirectionAction(this.MoveDirection);
-            SetStateAction(CharacterState.EnumICharacterState._moveState);
+            _setMoveDirectionAction(this.MoveDirection);
+            _setStateAction(CharacterState.EnumICharacterState._moveState);
         }
     }
 
@@ -52,7 +52,7 @@ public class PlayerControl : MonoBehaviour
             context.action.phase == InputActionPhase.Canceled)
         {
             this.TurnDirection = context.ReadValue<float>();
-            SetTurnDirectionAction(this.TurnDirection);
+            _setTurnDirectionAction(this.TurnDirection);
         }
     }
 
@@ -60,20 +60,13 @@ public class PlayerControl : MonoBehaviour
     {
         if (context.action.phase == InputActionPhase.Performed)
         {
-            SetStateAction(CharacterState.EnumICharacterState._jumpState);
+            _setStateAction(CharacterState.EnumICharacterState._jumpState);
         }
     }
 
     //인벤토리 열기
     public void OnInventory(InputAction.CallbackContext context)
     {
-        if (context.action.phase == InputActionPhase.Performed)
-        {
-            Inventory();
-        }
-    }
-    private void Inventory()
-    {
-
+        return;
     }
 }

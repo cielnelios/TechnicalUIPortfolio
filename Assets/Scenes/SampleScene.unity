@@ -311,10 +311,10 @@ MonoBehaviour:
   thisGameObjectModelAnimation: {fileID: 446806911}
   _moveDirection: {x: 0, y: 0, z: 0}
   _turnDirection: 0
-  _rotateSpeed: 0.18
-  _jumpSpeed: 500
+  rotateSpeed: 0.18
+  jumpSpeed: 500
   moveSpeed: 5
-  _isAllowMove: 1
+  isAllowMove: 1
   playerControl: {fileID: 400845371}
   _playerRigidbody: {fileID: 400845374}
 --- !u!114 &400845371
@@ -2017,5 +2017,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 751c95a6a9b4d384c929bcf3b107de09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextSceneName: ComponentSetting
-  mode: 1
+  _nextSceneName: ComponentSetting
+  _mode: 1

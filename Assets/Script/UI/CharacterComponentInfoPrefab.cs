@@ -11,7 +11,7 @@ public class CharacterComponentInfoPrefab : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _thisText;
     public (float xPos, float yPos) thisPosition;
 
-    public Dictionary<GameObject, IComponentStrategy> StrategyInSlotDictionary// { get; private set; }
+    public Dictionary<GameObject, IComponentStrategy> StrategyInSlotDictionary
         = new Dictionary<GameObject, IComponentStrategy>();
 
     private void Start()

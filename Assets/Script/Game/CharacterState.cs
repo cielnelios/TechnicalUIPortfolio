@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,10 +38,10 @@ public class CharacterState : MonoBehaviour
     public Animator thisGameObjectModelAnimation;
     [SerializeField] private Vector3 _moveDirection;
     [SerializeField] private float _turnDirection;
-    public float _rotateSpeed = 0.18f;
-    public float _jumpSpeed = 500.0f;
+    public float rotateSpeed = 0.18f;
+    public float jumpSpeed = 500.0f;
     public float moveSpeed = 5f;
-    public bool _isAllowMove = true;
+    public bool isAllowMove = true;
 
     [Header("구독할 액션이 있는 클래스들")]
     public PlayerControl playerControl;
@@ -67,7 +66,7 @@ public class CharacterState : MonoBehaviour
         ICharacterStateDictionary.Add(EnumICharacterState._moveState, this.gameObject.AddComponent<CharacterMoveState>());
         ICharacterStateDictionary.Add(EnumICharacterState._jumpState, this.gameObject.AddComponent<CharacterJumpState>());
         
-        this._isAllowMove = true;
+        this.isAllowMove = true;
 
         _characterStateContext.CharacterStateTransition(ICharacterStateDictionary[EnumICharacterState._idleState]);
     }
@@ -86,7 +85,7 @@ public class CharacterState : MonoBehaviour
     // 이 캐릭터의 이동 (모션이 아닌 move 메소드에 의한 좌표 이동)를 허용할지 말지 세팅하는 함수
     public void SetisAllowMoveBoolean(bool isAllowMove)
     {
-        this._isAllowMove = isAllowMove;
+        this.isAllowMove = isAllowMove;
     }
 
     // 이동과 회전 세팅용 함수
@@ -103,7 +102,7 @@ public class CharacterState : MonoBehaviour
     // 이동과 회전은 모든 모션에서 상시로 하니까 따로 빼두고, 착지같은 예외에서만 잠그도록 _isAllowMove boolean 추가함
     void FixedUpdate()
     {
-        if (_isAllowMove)
+        if (isAllowMove)
         {
             Move();
             Rotate();
@@ -120,7 +119,7 @@ public class CharacterState : MonoBehaviour
     private void Rotate()
     {
         //this.gameObject.transform.rotation = Quaternion.AngleAxis(angle, Vector3.up) * this.gameObject.transform.rotation;
-        Vector3 turn = Vector3.up * this._turnDirection * this._rotateSpeed;
+        Vector3 turn = Vector3.up * this._turnDirection * this.rotateSpeed;
         _playerRigidbody.rotation *= Quaternion.Euler(turn);
     }
 
@@ -183,7 +182,7 @@ public class CharacterState : MonoBehaviour
             }
 
             // 점프 속도 세팅
-            Vector3 jumpVector3 = /*_characterState._moveDirection + */_characterState._jumpSpeed * Vector3.up;
+            Vector3 jumpVector3 = /*_characterState._moveDirection + */_characterState.jumpSpeed * Vector3.up;
             _characterState._playerRigidbody.AddForce(jumpVector3);
 
             // 애니
